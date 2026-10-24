@@ -5,6 +5,7 @@ import Decimal from "../systems/Decimal";
 import Hexadecimal from "../systems/Hexadecimal";
 import Octal from "../systems/Octal";
 import NumberConversion from "./NumberConversion";
+import TestYourSelf from "./TestYourSelf";
 
 const NumberSystem = () => {
   const decimalSystem = numberSystems.find((system) => system.id === "decimal");
@@ -17,6 +18,7 @@ const NumberSystem = () => {
   return (
     <>
       <NumberConversion />
+      <TestYourSelf />
       {decimalSystem && <Decimal system={decimalSystem} />}
       {octalSystem && <Octal system={octalSystem} />}
       {hexadecimalSystem && <Hexadecimal system={hexadecimalSystem} />}
