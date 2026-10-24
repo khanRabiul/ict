@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import AnimationSpeed from "../components/AnimationSpeed";
 
 const DIGITS = "01234567";
 const BASE = DIGITS.length;
 
-function RollingDigit({ value, place }) {
+function RollingDigit({ value, place, duration }) {
   const position = Math.floor(value / place);
   const digits = Array.from(
     { length: position + BASE + 3 },
@@ -13,9 +14,10 @@ function RollingDigit({ value, place }) {
   return (
     <div className="h-12 w-12 overflow-hidden rounded-xl bg-gradient-to-b from-[#10172e] via-[#172554] to-[#111827] text-cyan-300 shadow-[inset_0_2px_8px_rgba(103,232,249,0.15),0_6px_15px_rgba(30,41,59,0.2)] ring-1 ring-cyan-400/30">
       <div
-        className="transition-transform duration-500 ease-in-out"
+        className="transition-transform ease-in-out"
         style={{
           transform: `translateY(-${position * 3}rem)`,
+          transitionDuration: `${duration}ms`,
         }}
       >
         {digits.map((digit, index) => (
@@ -31,7 +33,7 @@ function RollingDigit({ value, place }) {
   );
 }
 
-function CounterDisplay({ count }) {
+function CounterDisplay({ count, duration }) {
   const places = [];
   let place = 1;
 
@@ -54,26 +56,35 @@ function CounterDisplay({ count }) {
             key={digitPlace}
             value={count}
             place={digitPlace}
+            duration={duration}
           />
         ))}
       </div>
 
-      <p className="mb-2 text-center text-sm font-medium text-slate-500">
-        Current number
-      </p>
-
-      <p className="mb-6 break-all bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 bg-clip-text text-center font-mono text-2xl font-black text-transparent">
-        {count.toString(BASE)}
-      </p>
+      <div className="mb-6 grid grid-cols-2 gap-3">
+        <div className="min-w-0 rounded-xl border border-blue-100 bg-white/80 p-3 text-center">
+          <p className="text-xs font-medium text-slate-500">Current number</p>
+          <p className="mt-1 break-all bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 bg-clip-text font-mono text-xl font-black text-transparent">
+            {count.toString(BASE)}
+          </p>
+        </div>
+        <div className="min-w-0 rounded-xl border border-violet-100 bg-white/80 p-3 text-center">
+          <p className="text-xs font-medium text-slate-500">Decimal number</p>
+          <p className="mt-1 break-all font-mono text-xl font-black text-slate-800">
+            {count.toLocaleString("en-US")}
+          </p>
+        </div>
+      </div>
     </>
   );
 }
 
-const Octal = () => {
+const Octal = ({ system }) => {
   const [activeTab, setActiveTab] = useState("automatic");
   const [automaticCount, setAutomaticCount] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [manualCount, setManualCount] = useState(0);
+  const [animationDuration, setAnimationDuration] = useState(500);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -134,6 +145,22 @@ const Octal = () => {
             Automatic and manual counting have separate values and controls.
           </p>
 
+          <div className="mt-5 rounded-2xl border border-cyan-100 bg-gradient-to-r from-cyan-50/80 to-blue-50/80 p-4">
+            <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-blue-800">
+              Digits available
+            </h3>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {system.symbols.split("").map((symbol) => (
+                <span
+                  key={symbol}
+                  className="grid size-9 place-items-center rounded-xl border border-cyan-100 bg-white font-mono text-sm font-bold text-blue-800 shadow-sm"
+                >
+                  {symbol}
+                </span>
+              ))}
+            </div>
+          </div>
+
           <div
             className="mt-6 grid grid-cols-2 rounded-2xl border border-slate-200 bg-slate-100 p-1 shadow-inner"
             role="tablist"
@@ -178,7 +205,15 @@ const Octal = () => {
                 Automatic Counter
               </h3>
 
-              <CounterDisplay count={automaticCount} />
+              <AnimationSpeed
+                duration={animationDuration}
+                onChange={setAnimationDuration}
+              />
+
+              <CounterDisplay
+                count={automaticCount}
+                duration={animationDuration}
+              />
 
               <div className="flex flex-wrap justify-center gap-3">
                 <button
@@ -224,7 +259,12 @@ const Octal = () => {
                 Manual Counter
               </h3>
 
-              <CounterDisplay count={manualCount} />
+              <AnimationSpeed
+                duration={animationDuration}
+                onChange={setAnimationDuration}
+              />
+
+              <CounterDisplay count={manualCount} duration={animationDuration} />
 
               <div className="flex flex-wrap justify-center gap-3">
                 <button
