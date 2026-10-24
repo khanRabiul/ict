@@ -9,6 +9,7 @@ import Octal from "../systems/Octal";
 import NumberConversion from "./NumberConversion";
 import Quiz from "./Quiz";
 import TestYourSelf from "./TestYourSelf";
+import { Localized } from "../i18n";
 
 const NumberSystem = ({ page, onNavigate }) => {
   const [activeSystem, setActiveSystem] = useState("decimal");
@@ -40,6 +41,7 @@ const NumberSystem = ({ page, onNavigate }) => {
   }, [activeSystem]);
 
   return (
+    <Localized>
     <>
       <section
         hidden={page !== "home"}
@@ -172,6 +174,7 @@ const NumberSystem = ({ page, onNavigate }) => {
         )}
       </section>
     </>
+    </Localized>
   );
 };
 

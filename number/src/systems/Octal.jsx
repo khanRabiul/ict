@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AnimationSpeed from "../components/AnimationSpeed";
+import { Localized } from "../i18n";
 
 const DIGITS = "01234567";
 const BASE = DIGITS.length;
@@ -45,6 +46,7 @@ function CounterDisplay({ count, duration }) {
   places.reverse();
 
   return (
+    <Localized>
     <>
       <div
         className="my-8 flex flex-wrap items-center justify-center gap-2.5"
@@ -76,6 +78,7 @@ function CounterDisplay({ count, duration }) {
         </div>
       </div>
     </>
+    </Localized>
   );
 }
 
@@ -114,6 +117,7 @@ const Octal = ({ system }) => {
   };
 
   return (
+    <Localized>
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_#e0f2fe_0%,_#f1f5f9_42%,_#ede9fe_100%)] px-6 py-16 text-slate-900">
       <section className="mx-auto max-w-3xl">
         <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-blue-700">
@@ -297,6 +301,7 @@ const Octal = ({ system }) => {
         </article>
       </section>
     </main>
+    </Localized>
   );
 };
 

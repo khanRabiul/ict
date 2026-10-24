@@ -55,6 +55,14 @@ export function areEquivalentNumbers(first, second, system) {
   );
 }
 
+export function matchesConversionAnswer(answer, conversion, system) {
+  return (
+    areEquivalentNumbers(answer, conversion.value, system) ||
+    (conversion.isTruncated &&
+      areEquivalentNumbers(answer, conversion.roundedValue, system))
+  );
+}
+
 export function getPlaceValueExpansion(value, system) {
   const { wholeDigits, fractionalText } = value;
   const digits = [
@@ -140,11 +148,43 @@ export function convertRational(value, system) {
     });
   }
 
+  let roundedValue = "";
+  if (remainder > 0n) {
+    const roundedDigits = [...fractionalOutput];
+    let carry =
+      remainder * 2n >= value.denominator ? 1 : 0;
+
+    for (let index = roundedDigits.length - 1; carry && index >= 0; index -= 1) {
+      const digitValue = system.symbols.indexOf(roundedDigits[index]) + carry;
+      roundedDigits[index] = system.symbols[digitValue % system.base];
+      carry = digitValue >= system.base ? 1 : 0;
+    }
+
+    let roundedInteger = integerOutput;
+    if (carry) {
+      const integerDigits = [...roundedInteger];
+      let position = integerDigits.length - 1;
+
+      while (position >= 0 && carry) {
+        const digitValue = system.symbols.indexOf(integerDigits[position]) + 1;
+        integerDigits[position] = system.symbols[digitValue % system.base];
+        carry = digitValue >= system.base ? 1 : 0;
+        position -= 1;
+      }
+
+      if (carry) integerDigits.unshift(system.symbols[1]);
+      roundedInteger = integerDigits.join("");
+    }
+
+    roundedValue = `${roundedInteger}.${roundedDigits.join("")}`;
+  }
+
   return {
     value: fractionalOutput
       ? `${integerOutput}.${fractionalOutput}`
       : integerOutput,
     isTruncated: remainder > 0n,
+    roundedValue,
     integerDivisionSteps,
     fractionalMultiplicationSteps,
   };

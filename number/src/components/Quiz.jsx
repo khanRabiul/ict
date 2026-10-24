@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Localized } from "../i18n";
 
 const questions = [
   {
@@ -61,6 +62,7 @@ const Quiz = () => {
   };
 
   return (
+    <Localized>
     <section className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
       <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-violet-700">
         Quick quiz
@@ -175,6 +177,7 @@ const Quiz = () => {
         )}
       </article>
     </section>
+    </Localized>
   );
 };
 

@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
 import NumberSystem from "./components/NumberSystem";
 import pages from "./data/pages";
+import { LanguageProvider } from "./i18n";
 
 function App() {
   const pageContentRef = useRef(null);
@@ -67,16 +68,18 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
-      <Navbar currentPath={currentPath} onNavigate={navigate} />
-      <div ref={pageContentRef}>
-        <NumberSystem
-          page={currentPath.slice(1) || "home"}
-          onNavigate={navigate}
-        />
+    <LanguageProvider>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
+        <Navbar currentPath={currentPath} onNavigate={navigate} />
+        <div ref={pageContentRef}>
+          <NumberSystem
+            page={currentPath.slice(1) || "home"}
+            onNavigate={navigate}
+          />
+        </div>
+        <Analytics />
       </div>
-      <Analytics />
-    </div>
+    </LanguageProvider>
   );
 }
 

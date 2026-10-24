@@ -5,6 +5,7 @@ import {
   getPlaceValueExpansion,
   parseNumber,
 } from "../utils/numberConversion";
+import { Localized } from "../i18n";
 
 const NumberConversion = () => {
   const [conversionMode, setConversionMode] = useState("single");
@@ -95,6 +96,7 @@ const NumberConversion = () => {
   }
 
   return (
+    <Localized>
     <section
       id="converter"
       className="mx-auto max-w-3xl scroll-mt-24 px-6 py-12 sm:py-16"
@@ -153,22 +155,38 @@ const NumberConversion = () => {
             <span className="mb-2 block text-sm font-bold text-slate-700">
               Convert from
             </span>
-            <select
-              value={sourceId}
-              onChange={(event) => {
-                const nextSourceId = event.target.value;
-                setSourceId(nextSourceId);
-                setInputError("");
-                clearConversion();
-              }}
-              className="w-full rounded-xl border border-blue-100 bg-sky-50 px-4 py-3 font-semibold text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
-            >
-              {numberSystems.map((system) => (
-                <option key={system.id} value={system.id}>
-                  {system.name} (base {system.base})
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                value={sourceId}
+                onChange={(event) => {
+                  const nextSourceId = event.target.value;
+                  setSourceId(nextSourceId);
+                  setInputError("");
+                  clearConversion();
+                }}
+                className="w-full appearance-none rounded-xl border border-blue-100 bg-sky-50 px-4 py-3 pr-10 font-semibold text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+              >
+                {numberSystems.map((system) => (
+                  <option key={system.id} value={system.id}>
+                    {system.name} (base {system.base})
+                  </option>
+                ))}
+              </select>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                fill="none"
+                className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-slate-500"
+              >
+                <path
+                  d="m5 7.5 5 5 5-5"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </label>
 
           {conversionMode === "single" && (
@@ -188,7 +206,7 @@ const NumberConversion = () => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="size-5"
+                  className="size-5 rotate-90 transition-transform duration-200 sm:rotate-0"
                 >
                   <path d="M7 7h14l-3-3" />
                   <path d="m21 7-3 3" />
@@ -201,20 +219,36 @@ const NumberConversion = () => {
             <span className="mb-2 block text-sm font-bold text-slate-700">
               Convert to
             </span>
-            <select
-              value={targetId}
-              onChange={(event) => {
-                setTargetId(event.target.value);
-                clearConversion();
-              }}
-              className="w-full rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 font-semibold text-slate-800 outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
-            >
-              {numberSystems.map((system) => (
-                <option key={system.id} value={system.id}>
-                  {system.name} (base {system.base})
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                value={targetId}
+                onChange={(event) => {
+                  setTargetId(event.target.value);
+                  clearConversion();
+                }}
+                className="w-full appearance-none rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 pr-10 font-semibold text-slate-800 outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
+              >
+                {numberSystems.map((system) => (
+                  <option key={system.id} value={system.id}>
+                    {system.name} (base {system.base})
+                  </option>
+                ))}
+              </select>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                fill="none"
+                className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-slate-500"
+              >
+                <path
+                  d="m5 7.5 5 5 5-5"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
               </label>
             </>
           )}
@@ -234,7 +268,7 @@ const NumberConversion = () => {
             }}
             aria-invalid={Boolean(inputError || (hasConverted && error))}
             aria-describedby="number-input-error"
-            placeholder={`Enter ${sourceSystem?.name.toLowerCase()} digits, e.g. 10.625`}
+            placeholder={`Enter ${sourceSystem?.name.toLowerCase()} digits, e.g. ${sourceSystem?.exampleFraction}`}
             autoComplete="off"
             spellCheck="false"
             className={`w-full rounded-xl border px-4 py-3 font-mono text-lg font-semibold uppercase outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 ${
@@ -283,12 +317,14 @@ const NumberConversion = () => {
               </p>
               <p className="mt-2 min-h-8 break-all font-mono text-2xl font-black text-emerald-900">
                 {output
-                  ? `${output}${outputIsTruncated ? "…" : ""}`
+                  ? outputIsTruncated
+                    ? `≈ ${outputConversion.roundedValue}`
+                    : output
                   : "—"}
               </p>
               {outputIsTruncated && (
                 <p className="mt-1 text-xs text-slate-600">
-                  The fractional result continues; shown to 16 digits.
+                  Repeating fraction, rounded to 16 fractional digits.
                 </p>
               )}
             </div>
@@ -296,7 +332,7 @@ const NumberConversion = () => {
             {showDetails && normalizedInput && sourceSystem && targetSystem && (
               <div className="mt-5 space-y-4">
                 <h2 className="text-lg font-extrabold text-slate-800">
-                  How to Convert {sourceSystem.name} to {targetSystem.name}
+                  {`How to Convert ${sourceSystem.name} to ${targetSystem.name}`}
                 </h2>
 
                 <section className="rounded-2xl border border-blue-100 bg-sky-50/70 p-4">
@@ -382,8 +418,9 @@ const NumberConversion = () => {
                         The integer digits are read bottom to top; the
                         fractional digits are read top to bottom:{" "}
                         <strong className="font-mono">
-                          {output}
-                          {outputIsTruncated ? "…" : ""}
+                          {outputIsTruncated
+                            ? `≈ ${outputConversion.roundedValue}`
+                            : output}
                         </strong>
                       </p>
                     </>
@@ -414,12 +451,13 @@ const NumberConversion = () => {
                           {system.name} output
                         </p>
                         <p className="mt-2 break-all font-mono text-2xl font-black text-emerald-900">
-                          {result}
-                          {conversion.isTruncated ? "…" : ""}
+                          {conversion.isTruncated
+                            ? `≈ ${conversion.roundedValue}`
+                            : result}
                         </p>
                         {conversion.isTruncated && (
                           <p className="mt-1 text-xs text-slate-600">
-                            The fractional result continues; shown to 16
+                            Repeating fraction, rounded to 16 fractional
                             digits.
                           </p>
                         )}
@@ -441,7 +479,7 @@ const NumberConversion = () => {
                         {isExpanded && (
                           <div className="mt-4 space-y-3 border-t border-emerald-200 pt-4">
                             <h3 className="font-extrabold text-slate-800">
-                              How to Convert {sourceSystem.name} to {system.name}
+                              {`How to Convert ${sourceSystem.name} to ${system.name}`}
                             </h3>
                             <section className="rounded-xl border border-blue-100 bg-sky-50/70 p-4">
                               <h3 className="font-bold text-blue-950">
@@ -539,14 +577,15 @@ const NumberConversion = () => {
                                       the fractional digits are read top to
                                       bottom:{" "}
                                       <strong className="font-mono">
-                                        {result}
-                                        {conversion.isTruncated ? "…" : ""}
+                                        {conversion.isTruncated
+                                          ? `≈ ${conversion.roundedValue}`
+                                          : result}
                                       </strong>
                                     </p>
                                     {conversion.isTruncated && (
                                       <p className="text-xs text-slate-600">
-                                        The fractional result continues; shown to
-                                        16 digits.
+                                        Repeating fraction, rounded to 16
+                                        fractional digits.
                                       </p>
                                     )}
                                   </>
@@ -563,6 +602,7 @@ const NumberConversion = () => {
         </form>
       </article>
     </section>
+    </Localized>
   );
 };
 

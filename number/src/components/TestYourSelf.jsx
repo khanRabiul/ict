@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import numberSystems from "../data/numberSystems";
 import {
-  areEquivalentNumbers,
   convertRational,
   getPlaceValueExpansion,
+  matchesConversionAnswer,
   parseNumber,
 } from "../utils/numberConversion";
+import { Localized } from "../i18n";
 
 const TestYourSelf = () => {
   const [testMode, setTestMode] = useState("single");
@@ -70,13 +71,11 @@ const TestYourSelf = () => {
             .toUpperCase();
           if (!userAnswer) return;
           const conversion = convertRational(parsedInput, system);
-          const expectedAnswer = conversion.value;
+          const expectedAnswer = conversion.isTruncated
+            ? conversion.roundedValue
+            : conversion.value;
           results[system.id] = {
-            isCorrect: areEquivalentNumbers(
-              userAnswer,
-              expectedAnswer,
-              system
-            ),
+            isCorrect: matchesConversionAnswer(userAnswer, conversion, system),
             correctAnswer: expectedAnswer,
             isTruncated: conversion.isTruncated,
           };
@@ -108,14 +107,16 @@ const TestYourSelf = () => {
       return;
     }
 
-    const isCorrect = areEquivalentNumbers(
+    const isCorrect = matchesConversionAnswer(
       normalizedAnswer,
-      correctAnswer,
+      targetConversion,
       targetSystem
     );
     setResult({
       isCorrect,
-      correctAnswer,
+      correctAnswer: targetConversion.isTruncated
+        ? targetConversion.roundedValue
+        : correctAnswer,
       isTruncated: targetConversion.isTruncated,
     });
     setFeedbackIsCorrect(isCorrect);
@@ -152,6 +153,7 @@ const TestYourSelf = () => {
   }
 
   return (
+    <Localized>
     <section
       id="test-skills"
       className="mx-auto max-w-3xl scroll-mt-24 px-6 py-12 sm:py-16"
@@ -208,27 +210,43 @@ const TestYourSelf = () => {
               <span className="mb-2 block text-sm font-bold text-slate-700">
                 Convert from
               </span>
-              <select
-                value={sourceId}
-                onChange={(event) => {
-                  setSourceId(event.target.value);
-                  setSourceInput("");
-                  setAnswer("");
-                  setResult(null);
-                  setMultipleAnswers({});
-                  setMultipleResults({});
-                  setShowDetails(false);
-                  setExpandedResultIds([]);
-                  setFeedbackMessage(null);
-                }}
-                className="w-full rounded-xl border border-blue-100 bg-sky-50 px-4 py-3 font-semibold text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
-              >
-                {numberSystems.map((system) => (
-                  <option key={system.id} value={system.id}>
-                    {system.name} (base {system.base})
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={sourceId}
+                  onChange={(event) => {
+                    setSourceId(event.target.value);
+                    setSourceInput("");
+                    setAnswer("");
+                    setResult(null);
+                    setMultipleAnswers({});
+                    setMultipleResults({});
+                    setShowDetails(false);
+                    setExpandedResultIds([]);
+                    setFeedbackMessage(null);
+                  }}
+                  className="w-full appearance-none rounded-xl border border-blue-100 bg-sky-50 px-4 py-3 pr-10 font-semibold text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                >
+                  {numberSystems.map((system) => (
+                    <option key={system.id} value={system.id}>
+                      {system.name} (base {system.base})
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-slate-500"
+                >
+                  <path
+                    d="m5 7.5 5 5 5-5"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
             </label>
 
             {testMode === "single" && (
@@ -236,22 +254,38 @@ const TestYourSelf = () => {
               <span className="mb-2 block text-sm font-bold text-slate-700">
                 Convert to
               </span>
-              <select
-                value={targetId}
-                onChange={(event) => {
-                  setTargetId(event.target.value);
-                  setAnswer("");
-                  setResult(null);
-                  setShowDetails(false);
-                }}
-                className="w-full rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 font-semibold text-slate-800 outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
-              >
-                {numberSystems.map((system) => (
-                  <option key={system.id} value={system.id}>
-                    {system.name} (base {system.base})
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={targetId}
+                  onChange={(event) => {
+                    setTargetId(event.target.value);
+                    setAnswer("");
+                    setResult(null);
+                    setShowDetails(false);
+                  }}
+                  className="w-full appearance-none rounded-xl border border-violet-100 bg-violet-50 px-4 py-3 pr-10 font-semibold text-slate-800 outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-200"
+                >
+                  {numberSystems.map((system) => (
+                    <option key={system.id} value={system.id}>
+                      {system.name} (base {system.base})
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-slate-500"
+                >
+                  <path
+                    d="m5 7.5 5 5 5-5"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
               </label>
             )}
           </div>
@@ -272,7 +306,7 @@ const TestYourSelf = () => {
                 setShowDetails(false);
                 setExpandedResultIds([]);
               }}
-              placeholder={`Enter a ${sourceSystem?.name.toLowerCase()} number, e.g. 10.625`}
+              placeholder={`Enter a ${sourceSystem?.name.toLowerCase()} number, e.g. ${sourceSystem?.exampleFraction}`}
               autoComplete="off"
               spellCheck="false"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-lg font-semibold uppercase text-slate-800 outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
@@ -284,6 +318,10 @@ const TestYourSelf = () => {
               {sourceError}
             </p>
           )}
+          <p className="mt-2 text-xs text-slate-500">
+            Repeating fractional answers may be entered truncated or rounded
+            to 16 fractional digits.
+          </p>
 
           {testMode === "single" && <label className="tab-panel-enter mt-5 block">
             <span className="mb-2 block text-sm font-bold text-slate-700">
@@ -385,12 +423,11 @@ const TestYourSelf = () => {
                   result.isCorrect ? "text-emerald-900" : "text-rose-900"
                 }`}
               >
-                {result.correctAnswer}
-                {result.isTruncated ? "…" : ""}
+                {result.isTruncated ? `≈ ${result.correctAnswer}` : result.correctAnswer}
               </p>
               {result.isTruncated && (
                 <p className="mt-1 text-xs text-slate-600">
-                  The fractional result continues; shown to 16 digits.
+                  Repeating fraction, rounded to 16 fractional digits.
                 </p>
               )}
               <button
@@ -406,7 +443,7 @@ const TestYourSelf = () => {
             {showDetails && sourceSystem && targetSystem && (
               <div className="mt-4 space-y-3 border-t border-slate-200 pt-4">
                 <h2 className="font-extrabold text-slate-800">
-                  How to Convert {sourceSystem.name} to {targetSystem.name}
+                  {`How to Convert ${sourceSystem.name} to ${targetSystem.name}`}
                 </h2>
                 <section className="rounded-xl border border-blue-100 bg-sky-50/80 p-4">
                   <h2 className="font-bold text-blue-950">
@@ -486,13 +523,14 @@ const TestYourSelf = () => {
                         The integer digits are read bottom to top; the
                         fractional digits are read top to bottom:{" "}
                         <strong className="font-mono">
-                          {correctAnswer}
-                          {targetConversion.isTruncated ? "…" : ""}
+                          {targetConversion.isTruncated
+                            ? `≈ ${targetConversion.roundedValue}`
+                            : correctAnswer}
                         </strong>
                       </p>
                       {targetConversion.isTruncated && (
                         <p className="text-xs text-slate-600">
-                          The fractional result continues; shown to 16 digits.
+                          Repeating fraction, rounded to 16 fractional digits.
                         </p>
                       )}
                     </>
@@ -537,11 +575,13 @@ const TestYourSelf = () => {
                           <p className="mt-1 font-mono text-xl font-black text-slate-900">
                             {item.isCorrect
                               ? multipleAnswers[system.id].trim().toUpperCase()
-                              : `${item.correctAnswer}${item.isTruncated ? "…" : ""}`}
+                              : item.isTruncated
+                                ? `≈ ${item.correctAnswer}`
+                                : item.correctAnswer}
                           </p>
                           {item.isTruncated && (
                             <p className="mt-1 text-xs text-slate-600">
-                              The fractional result continues; shown to 16
+                              Repeating fraction, rounded to 16 fractional
                               digits.
                             </p>
                           )}
@@ -573,7 +613,7 @@ const TestYourSelf = () => {
                       {isExpanded && (
                         <div className="mt-4 space-y-3 border-t border-slate-200 pt-4">
                           <h3 className="font-extrabold text-slate-800">
-                            How to Convert {sourceSystem.name} to {system.name}
+                            {`How to Convert ${sourceSystem.name} to ${system.name}`}
                           </h3>
                           <section className="rounded-xl border border-blue-100 bg-sky-50/80 p-4">
                             <h3 className="font-bold text-blue-950">
@@ -662,14 +702,15 @@ const TestYourSelf = () => {
                                   The integer digits are read bottom to top;
                                   the fractional digits are read top to bottom:{" "}
                                   <strong className="font-mono">
-                                    {item.correctAnswer}
-                                    {conversion.isTruncated ? "…" : ""}
+                                    {conversion.isTruncated
+                                      ? `≈ ${conversion.roundedValue}`
+                                      : item.correctAnswer}
                                   </strong>
                                 </p>
                                 {conversion.isTruncated && (
                                   <p className="text-xs text-slate-600">
-                                    The fractional result continues; shown to
-                                    16 digits.
+                                    Repeating fraction, rounded to 16
+                                    fractional digits.
                                   </p>
                                 )}
                               </>
@@ -760,6 +801,7 @@ const TestYourSelf = () => {
         </div>
       )}
     </section>
+    </Localized>
   );
 };
 

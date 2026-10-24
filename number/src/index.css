@@ -1,5 +1,63 @@
 @import "tailwindcss";
 
+.mobile-nav-menu {
+  height: 0;
+  border-top-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding-block: 0;
+  pointer-events: none;
+  transform: translateY(-0.5rem);
+  transition:
+    height 250ms ease,
+    opacity 200ms ease,
+    transform 250ms ease,
+    padding 250ms ease,
+    border-top-width 250ms ease,
+    visibility 0s linear 250ms;
+  visibility: hidden;
+}
+
+.mobile-nav-menu[data-open="true"] {
+  height: calc(100dvh - 4.25rem);
+  border-top-width: 1px;
+  opacity: 1;
+  padding-block: 0.75rem;
+  overflow-y: auto;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    height 250ms ease,
+    opacity 200ms ease,
+    transform 250ms ease,
+    padding 250ms ease,
+    border-top-width 250ms ease,
+    visibility 0s;
+  visibility: visible;
+}
+
+@media (min-width: 640px) {
+  .mobile-nav-menu,
+  .mobile-nav-menu[data-open="true"] {
+    height: auto;
+    border-top-width: 0;
+    opacity: 1;
+    overflow: visible;
+    padding-block: 0;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
+    visibility: visible;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-menu,
+  .mobile-nav-menu[data-open="true"] {
+    transition: none;
+  }
+}
+
 @keyframes tab-panel-enter {
   from {
     opacity: 0;

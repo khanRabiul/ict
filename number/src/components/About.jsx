@@ -1,4 +1,5 @@
 import profileImage from "../assets/rabiul.png";
+import { Localized } from "../i18n";
 
 const profileLinks = [
   {
@@ -37,6 +38,7 @@ const profileLinks = [
 ];
 
 const About = () => (
+  <Localized>
   <section className="mx-auto max-w-4xl px-6 py-12 sm:py-16">
     <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-indigo-700">
       About me
@@ -49,15 +51,16 @@ const About = () => (
       <div className="grid items-center gap-8 p-6 sm:p-9 md:grid-cols-[minmax(0,1fr)_220px]">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-violet-700">
-            MERN Stack Developer
+            MERN Stack & Next.js Developer
           </p>
           <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">
             Khan Rabiul Islam
           </h2>
           <p className="mt-4 max-w-xl leading-relaxed text-slate-600">
             I build modern web applications with the MERN stack: MongoDB,
-            Express.js, React, and Node.js. This number systems project makes
-            learning number conversion interactive and approachable.
+            Express.js, React, and Node.js, as well as Next.js. This number
+            systems project makes learning number conversion interactive and
+            approachable.
           </p>
           <a
             href="mailto:krabiulislam2@gmail.com"
@@ -113,6 +116,7 @@ const About = () => (
       </div>
     </article>
   </section>
+  </Localized>
 );
 
 export default About;

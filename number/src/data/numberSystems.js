@@ -5,6 +5,7 @@ const numberSystems = [
     name: "Decimal",
     base: 10,
     symbols: "0123456789",
+    exampleFraction: "10.625",
     badge: "Digits 0–9",
     description:
       "The number system we use in everyday counting. Each digit's value depends on its position.",
@@ -17,6 +18,7 @@ const numberSystems = [
     name: "Binary",
     base: 2,
     symbols: "01",
+    exampleFraction: "1010.101",
     badge: "Digits 0–1",
     description:
       "A base-2 number system that uses only two digits: 0 and 1.",
@@ -29,6 +31,7 @@ const numberSystems = [
     name: "Octal",
     base: 8,
     symbols: "01234567",
+    exampleFraction: "12.5",
     badge: "Base 8",
     description:
       "A number system that uses eight digits, from 0 to 7.",
@@ -41,6 +44,7 @@ const numberSystems = [
     name: "Hexadecimal",
     base: 16,
     symbols: "0123456789ABCDEF",
+    exampleFraction: "A.A",
     badge: "Digits 0–9, A–F",
     description:
       "A base-16 number system using digits 0–9 and letters A–F.",
