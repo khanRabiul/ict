@@ -13,18 +13,18 @@ function RollingDigit({ value, place, duration }) {
   );
 
   return (
-    <div className="h-12 w-12 overflow-hidden rounded-xl bg-gradient-to-b from-[#10172e] via-[#172554] to-[#111827] text-cyan-300 shadow-[inset_0_2px_8px_rgba(103,232,249,0.15),0_6px_15px_rgba(30,41,59,0.2)] ring-1 ring-cyan-400/30">
+    <div className="h-20 w-20 overflow-hidden rounded-2xl bg-gradient-to-b from-[#10172e] via-[#172554] to-[#111827] text-cyan-300 shadow-[inset_0_2px_8px_rgba(103,232,249,0.15),0_6px_15px_rgba(30,41,59,0.2)] ring-1 ring-cyan-400/30">
       <div
         className="transition-transform ease-in-out"
         style={{
-          transform: `translateY(-${position * 3}rem)`,
+          transform: `translateY(-${position * 5}rem)`,
           transitionDuration: `${duration}ms`,
         }}
       >
         {digits.map((digit, index) => (
           <div
             key={index}
-            className="flex h-12 items-center justify-center font-mono text-3xl font-bold"
+            className="flex h-20 items-center justify-center font-mono text-5xl font-bold"
           >
             {digit}
           </div>
@@ -48,7 +48,7 @@ function CounterDisplay({ count, duration }) {
   return (
     <>
       <div
-        className="my-8 flex flex-wrap items-center justify-center gap-1.5"
+        className="my-8 flex flex-wrap items-center justify-center gap-2.5"
         role="img"
         aria-label={`Current number ${count.toLocaleString("en-US")}`}
       >
@@ -66,7 +66,7 @@ function CounterDisplay({ count, duration }) {
         Current number
       </p>
 
-      <p className="mb-6 break-all bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 bg-clip-text text-center font-mono text-2xl font-black text-transparent">
+      <p className="mb-6 break-all bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 bg-clip-text text-center font-mono text-4xl font-black text-transparent sm:text-5xl">
         {count.toLocaleString("en-US")}
       </p>
     </>
@@ -114,7 +114,7 @@ const Decimal = ({ system }) => {
 
   return (
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_#e0f2fe_0%,_#f1f5f9_42%,_#ede9fe_100%)] px-6 py-16 text-slate-900">
-      <section className="mx-auto max-w-xl">
+      <section className="mx-auto max-w-3xl">
         <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-blue-700">
           Number systems
         </p>
