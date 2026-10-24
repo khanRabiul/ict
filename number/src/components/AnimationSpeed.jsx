@@ -18,7 +18,7 @@ const AnimationSpeed = ({ duration, onChange }) => (
           className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
             duration === option
               ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/20"
-              : "border border-indigo-100 bg-white text-indigo-800 hover:bg-indigo-100"
+              : "border border-indigo-200 bg-cyan-50 text-indigo-800 hover:bg-teal-100"
           }`}
         >
           {option / 1000}s

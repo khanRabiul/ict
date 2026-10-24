@@ -64,13 +64,13 @@ function CounterDisplay({ count, duration }) {
       </div>
 
       <div className="mb-6 grid grid-cols-2 gap-3">
-        <div className="min-w-0 rounded-xl border border-blue-100 bg-white/80 p-3 text-center">
+        <div className="min-w-0 rounded-xl border border-blue-100 bg-sky-50/90 p-3 text-center">
           <p className="text-xs font-medium text-slate-500">Current number</p>
           <p className="mt-1 break-all bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 bg-clip-text font-mono text-3xl font-black text-transparent">
             {count.toString(BASE)}
           </p>
         </div>
-        <div className="min-w-0 rounded-xl border border-violet-100 bg-white/80 p-3 text-center">
+        <div className="min-w-0 rounded-xl border border-violet-100 bg-violet-50/90 p-3 text-center">
           <p className="text-xs font-medium text-slate-500">Decimal number</p>
           <p className="mt-1 break-all font-mono text-3xl font-black text-slate-800">
             {count.toLocaleString("en-US")}
@@ -128,7 +128,7 @@ const Octal = ({ system }) => {
           Octal Counter
         </h1>
 
-        <article className="overflow-hidden rounded-[28px] border border-white/80 bg-white/90 p-6 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.3)] backdrop-blur-sm sm:p-8">
+        <article className="overflow-hidden rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-cyan-50/95 via-sky-50/90 to-blue-100/70 p-6 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.3)] backdrop-blur-sm sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 text-base font-black text-white shadow-lg shadow-indigo-500/30">
@@ -157,7 +157,7 @@ const Octal = ({ system }) => {
               {system.symbols.split("").map((symbol) => (
                 <span
                   key={symbol}
-                  className="grid size-9 place-items-center rounded-xl border border-cyan-100 bg-white font-mono text-sm font-bold text-blue-800 shadow-sm"
+                  className="grid size-9 place-items-center rounded-xl border border-cyan-200 bg-cyan-50 font-mono text-sm font-bold text-blue-800 shadow-sm"
                 >
                   {symbol}
                 </span>
@@ -166,7 +166,7 @@ const Octal = ({ system }) => {
           </div>
 
           <div
-            className="mt-6 grid grid-cols-2 rounded-2xl border border-slate-200 bg-slate-100 p-1 shadow-inner"
+            className="mt-6 grid grid-cols-2 rounded-2xl border border-cyan-100 bg-gradient-to-r from-cyan-100 via-violet-50 to-rose-100 p-1 shadow-inner"
             role="tablist"
             aria-label="Counter type"
           >
@@ -178,7 +178,7 @@ const Octal = ({ system }) => {
               className={`rounded-xl px-4 py-3 text-sm font-bold transition-all ${
                 activeTab === "automatic"
                   ? "bg-gradient-to-r from-blue-700 to-cyan-600 text-white shadow-lg shadow-blue-600/25"
-                  : "text-slate-600 hover:bg-white hover:text-blue-700"
+                  : "text-slate-600 hover:bg-cyan-100 hover:text-blue-800"
               }`}
             >
               Automatic
@@ -192,7 +192,7 @@ const Octal = ({ system }) => {
               className={`rounded-xl px-4 py-3 text-sm font-bold transition-all ${
                 activeTab === "manual"
                   ? "bg-gradient-to-r from-violet-700 to-fuchsia-600 text-white shadow-lg shadow-violet-600/25"
-                  : "text-slate-600 hover:bg-white hover:text-violet-700"
+                  : "text-slate-600 hover:bg-rose-100 hover:text-violet-800"
               }`}
             >
               Manual
@@ -203,7 +203,7 @@ const Octal = ({ system }) => {
             <section
               role="tabpanel"
               aria-label="Automatic counter"
-              className="tab-panel-enter mt-5 rounded-2xl border border-blue-100 bg-gradient-to-b from-sky-50/80 to-white p-4 sm:p-5"
+              className="tab-panel-enter mt-5 rounded-2xl border border-blue-200 bg-gradient-to-b from-sky-100/80 to-cyan-50 p-4 sm:p-5"
             >
               <h3 className="mt-2 text-center text-lg font-extrabold text-blue-950">
                 Automatic Counter
@@ -257,7 +257,7 @@ const Octal = ({ system }) => {
             <section
               role="tabpanel"
               aria-label="Manual counter"
-              className="tab-panel-enter mt-5 rounded-2xl border border-violet-100 bg-gradient-to-b from-violet-50/80 to-white p-4 sm:p-5"
+              className="tab-panel-enter mt-5 rounded-2xl border border-violet-200 bg-gradient-to-b from-violet-100/80 to-fuchsia-50 p-4 sm:p-5"
             >
               <h3 className="mt-2 text-center text-lg font-extrabold text-violet-950">
                 Manual Counter

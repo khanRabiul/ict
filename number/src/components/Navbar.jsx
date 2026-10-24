@@ -25,7 +25,7 @@ const LanguageSwitch = ({ language, setLanguage }) => (
     </span>
     <span
       aria-hidden="true"
-      className={`size-3.5 rounded-full bg-white shadow-sm transition-transform ${
+      className={`size-3.5 rounded-full bg-cyan-50 shadow-sm transition-transform ${
         language === "bn" ? "translate-x-5" : "translate-x-0"
       }`}
     />
@@ -43,7 +43,7 @@ const Navbar = ({ currentPath, onNavigate }) => {
 
   return (
     <Localized>
-    <header className="sticky top-0 z-40 border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-lg">
+    <header className="sticky top-0 z-40 border-b border-indigo-100/80 bg-gradient-to-r from-indigo-50/95 via-rose-50/90 to-cyan-50/90 shadow-[0_4px_24px_-16px_rgba(79,70,229,0.4)] backdrop-blur-lg">
       <nav
         className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1 px-4 py-3 sm:flex-nowrap sm:px-4 lg:px-6"
         aria-label="Main navigation"
@@ -66,7 +66,7 @@ const Navbar = ({ currentPath, onNavigate }) => {
           <LanguageSwitch language={language} setLanguage={setLanguage} />
           <button
             type="button"
-            className="relative inline-flex size-11 items-center justify-center rounded-xl border border-indigo-100 bg-white text-indigo-800 transition hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:hidden"
+            className="relative inline-flex size-11 items-center justify-center rounded-xl border border-indigo-100 bg-cyan-50 text-indigo-800 transition hover:bg-rose-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:hidden"
             aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMenuOpen}
             aria-controls="primary-navigation-links"
@@ -108,7 +108,7 @@ const Navbar = ({ currentPath, onNavigate }) => {
         <ul
           id="primary-navigation-links"
           data-open={isMenuOpen}
-          className="mobile-nav-menu fixed inset-x-0 top-[4.25rem] bottom-0 z-50 flex w-full flex-col gap-1 bg-white/95 px-4 shadow-lg backdrop-blur-lg sm:static sm:inset-auto sm:bottom-auto sm:z-auto sm:w-auto sm:flex-row sm:items-center sm:gap-0.5 sm:bg-transparent sm:px-0 sm:shadow-none sm:backdrop-blur-none"
+          className="mobile-nav-menu fixed inset-x-0 top-[4.25rem] bottom-0 z-50 flex w-full flex-col gap-1 bg-gradient-to-b from-indigo-50 via-sky-50 to-violet-100 px-4 shadow-lg backdrop-blur-lg sm:static sm:inset-auto sm:bottom-auto sm:z-auto sm:w-auto sm:flex-row sm:items-center sm:gap-0.5 sm:bg-none sm:px-0 sm:shadow-none sm:backdrop-blur-none"
         >
           {pages.map(({ path, label }) => (
             <li key={path}>
@@ -118,8 +118,8 @@ const Navbar = ({ currentPath, onNavigate }) => {
                 aria-current={currentPath === path ? "page" : undefined}
                 className={`flex rounded-xl px-1.5 py-2.5 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:py-2 md:px-2 md:text-base ${
                   currentPath === path
-                    ? "bg-indigo-100 text-indigo-900"
-                    : "text-slate-700 hover:bg-indigo-50 hover:text-indigo-800"
+                    ? "bg-gradient-to-r from-indigo-100 to-violet-100 text-indigo-950 shadow-sm shadow-indigo-900/5"
+                    : "text-slate-700 hover:bg-indigo-200/80 hover:text-indigo-950 hover:shadow-sm"
                 }`}
               >
                 {label}

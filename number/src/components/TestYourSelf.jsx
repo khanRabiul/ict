@@ -166,9 +166,9 @@ const TestYourSelf = () => {
         Test Your Skills
       </h1>
 
-      <article className="rounded-[28px] border border-white/80 bg-white/90 p-6 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.3)] backdrop-blur-sm sm:p-8">
+      <article className="rounded-[28px] border border-violet-100/80 bg-gradient-to-br from-violet-50/95 via-fuchsia-50/70 to-teal-50/80 p-6 shadow-[0_25px_60px_-22px_rgba(139,92,246,0.28)] backdrop-blur-sm sm:p-8">
         <div
-          className="mb-6 grid grid-cols-2 rounded-2xl border border-slate-200 bg-slate-100 p-1 shadow-inner"
+          className="mb-6 grid grid-cols-2 rounded-2xl border border-violet-100 bg-gradient-to-r from-violet-50 via-slate-50 to-teal-50 p-1 shadow-inner"
           role="tablist"
           aria-label="Test mode"
         >
@@ -191,8 +191,8 @@ const TestYourSelf = () => {
               }}
               className={`rounded-xl px-4 py-3 text-sm font-bold transition-all ${
                 testMode === tab.id
-                  ? "bg-linear-to-r from-violet-700 to-indigo-700 text-white shadow-lg shadow-violet-600/25"
-                  : "text-slate-600 hover:bg-white hover:text-indigo-700"
+                  ? "bg-linear-to-r from-violet-700 to-fuchsia-600 text-white shadow-lg shadow-fuchsia-600/25"
+                  : "text-slate-600 hover:bg-teal-100 hover:text-teal-800"
               }`}
             >
               {tab.label}
@@ -309,7 +309,7 @@ const TestYourSelf = () => {
               placeholder={`Enter a ${sourceSystem?.name.toLowerCase()} number, e.g. ${sourceSystem?.exampleFraction}`}
               autoComplete="off"
               spellCheck="false"
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-lg font-semibold uppercase text-slate-800 outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+              className="w-full rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-3 font-mono text-lg font-semibold uppercase text-slate-800 outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-500 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
             />
           </label>
 
@@ -338,7 +338,7 @@ const TestYourSelf = () => {
               placeholder={`Enter your ${targetSystem?.name.toLowerCase()} answer`}
               autoComplete="off"
               spellCheck="false"
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-lg font-semibold uppercase text-slate-800 outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+              className="w-full rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 font-mono text-lg font-semibold uppercase text-slate-800 outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-500 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
             />
           </label>}
 
@@ -369,7 +369,7 @@ const TestYourSelf = () => {
                       placeholder={`Enter ${system.name.toLowerCase()} result`}
                       autoComplete="off"
                       spellCheck="false"
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-lg font-semibold uppercase text-slate-800 outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                      className="w-full rounded-xl border border-teal-200 bg-teal-50 px-4 py-3 font-mono text-lg font-semibold uppercase text-slate-800 outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-500 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
                     />
                   </label>
                 ))}
@@ -434,7 +434,7 @@ const TestYourSelf = () => {
                 type="button"
                 onClick={() => setShowDetails((visible) => !visible)}
                 aria-expanded={showDetails}
-                className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-800 transition hover:bg-indigo-50"
+                className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-800 transition hover:bg-rose-100"
               >
                 {showDetails ? "Hide details" : "How to convert"}
               </button>
@@ -604,7 +604,7 @@ const TestYourSelf = () => {
                             )
                           }
                           aria-expanded={isExpanded}
-                          className="rounded-lg border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-800 transition hover:bg-indigo-50"
+                          className="rounded-lg border border-indigo-200 bg-violet-50 px-4 py-2 text-sm font-semibold text-indigo-800 transition hover:bg-cyan-100"
                         >
                           {isExpanded ? "Hide details" : "How to convert"}
                         </button>

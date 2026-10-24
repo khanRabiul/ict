@@ -47,11 +47,14 @@ const NumberSystem = ({ page, onNavigate }) => {
         hidden={page !== "home"}
         className="mx-auto max-w-6xl px-6 pb-4 pt-12 sm:pt-16"
       >
-        <div className="rounded-[28px] border border-white/80 bg-white/80 p-7 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.25)] backdrop-blur-sm sm:p-10">
+        <div className="relative isolate overflow-hidden rounded-[28px] border border-indigo-100/80 bg-gradient-to-br from-sky-50/95 via-cyan-50/90 to-rose-50/85 p-7 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.3)] backdrop-blur-sm sm:p-10">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-gradient-to-br from-cyan-300/40 via-sky-300/25 to-transparent blur-3xl" />
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-28 right-1/3 size-64 rounded-full bg-gradient-to-br from-rose-300/30 via-violet-300/25 to-transparent blur-3xl" />
+          <div className="relative z-10">
           <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-indigo-700">
             Learn by exploring
           </p>
-          <h1 className="max-w-3xl bg-linear-to-r from-indigo-800 via-violet-700 to-blue-700 bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-5xl">
+          <h1 className="max-w-3xl bg-linear-to-r from-indigo-800 via-violet-700 via-55% to-rose-600 bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-5xl">
             Understand number systems, one digit at a time.
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
@@ -62,17 +65,18 @@ const NumberSystem = ({ page, onNavigate }) => {
             <a
               href="/converter"
               onClick={(event) => onNavigate(event, "/converter")}
-              className="rounded-xl bg-linear-to-r from-indigo-700 to-violet-700 px-5 py-3 font-bold text-white shadow-lg shadow-indigo-600/20 transition hover:brightness-110"
+              className="rounded-xl bg-linear-to-r from-indigo-700 via-violet-700 to-rose-600 px-5 py-3 font-bold text-white shadow-lg shadow-violet-600/25 transition hover:brightness-110"
             >
               Try the converter
             </a>
             <a
               href="/counters"
               onClick={(event) => onNavigate(event, "/counters")}
-              className="rounded-xl border border-indigo-200 bg-white px-5 py-3 font-bold text-indigo-800 transition hover:bg-indigo-50"
+              className="rounded-xl border border-teal-200 bg-gradient-to-r from-teal-50 to-cyan-50 px-5 py-3 font-bold text-teal-800 shadow-sm shadow-teal-900/5 transition hover:border-teal-300 hover:from-teal-100 hover:to-cyan-100"
             >
               Explore counters
             </a>
+          </div>
           </div>
         </div>
       </section>
@@ -101,7 +105,7 @@ const NumberSystem = ({ page, onNavigate }) => {
           </h1>
 
           <div
-            className="mb-6 grid grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100 p-1 shadow-inner sm:grid-cols-4"
+            className="mb-6 grid grid-cols-2 gap-1 sm:grid-cols-4"
             role="tablist"
             aria-label="Select a number system"
           >
@@ -120,10 +124,10 @@ const NumberSystem = ({ page, onNavigate }) => {
                 aria-controls={`${id}-counter-panel`}
                 tabIndex={activeSystem === id ? 0 : -1}
                 onClick={() => setActiveSystem(id)}
-                className={`rounded-xl px-3 py-3 text-sm font-bold transition-all ${
+                className={`rounded-xl border px-3 py-3 text-sm font-bold transition-all ${
                   activeSystem === id
-                    ? "bg-linear-to-r from-blue-700 to-violet-700 text-white shadow-lg shadow-indigo-600/20"
-                    : "text-slate-600 hover:bg-white hover:text-indigo-700"
+                    ? "border-cyan-300 bg-linear-to-r from-cyan-600 via-blue-700 to-indigo-700 text-white shadow-lg shadow-cyan-700/20"
+                    : "border-indigo-100/80 bg-indigo-50/50 text-slate-600 hover:border-rose-200 hover:bg-gradient-to-r hover:from-rose-50 hover:to-cyan-50 hover:text-indigo-800"
                 }`}
               >
                 {label}

@@ -109,9 +109,9 @@ const NumberConversion = () => {
         Number System Converter
       </h1>
 
-      <article className="rounded-[28px] border border-white/80 bg-white/90 p-6 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.3)] backdrop-blur-sm sm:p-8">
+      <article className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-sky-50/95 via-cyan-50/90 to-sky-100/75 p-6 shadow-[0_25px_60px_-22px_rgba(59,130,246,0.28)] backdrop-blur-sm sm:p-8">
         <div
-          className="mb-6 grid grid-cols-2 rounded-2xl border border-slate-200 bg-slate-100 p-1 shadow-inner"
+          className="mb-6 grid grid-cols-2 rounded-2xl border border-cyan-100 bg-gradient-to-r from-cyan-50 via-slate-50 to-rose-50 p-1 shadow-inner"
           role="tablist"
           aria-label="Conversion mode"
         >
@@ -122,8 +122,8 @@ const NumberConversion = () => {
             onClick={() => changeConversionMode("single")}
             className={`rounded-xl px-4 py-3 text-sm font-bold transition-all ${
               conversionMode === "single"
-                ? "bg-gradient-to-r from-blue-700 to-cyan-600 text-white shadow-lg shadow-blue-600/25"
-                : "text-slate-600 hover:bg-white hover:text-blue-700"
+                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-lg shadow-teal-600/25"
+                : "text-slate-600 hover:bg-teal-100 hover:text-teal-800"
             }`}
           >
             Single conversion
@@ -135,8 +135,8 @@ const NumberConversion = () => {
             onClick={() => changeConversionMode("multiple")}
             className={`rounded-xl px-4 py-3 text-sm font-bold transition-all ${
               conversionMode === "multiple"
-                ? "bg-gradient-to-r from-violet-700 to-fuchsia-600 text-white shadow-lg shadow-violet-600/25"
-                : "text-slate-600 hover:bg-white hover:text-violet-700"
+                ? "bg-gradient-to-r from-violet-700 to-rose-600 text-white shadow-lg shadow-rose-600/25"
+                : "text-slate-600 hover:bg-rose-100 hover:text-rose-800"
             }`}
           >
             Multiple conversions
@@ -196,7 +196,7 @@ const NumberConversion = () => {
                 onClick={swapSystems}
                 aria-label="Swap source and target number systems"
                 title="Swap number systems"
-                className="mx-auto grid size-11 place-items-center rounded-xl border border-indigo-200 bg-white text-indigo-700 shadow-sm transition hover:bg-indigo-50 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 sm:mb-0.5"
+                className="mx-auto grid size-11 place-items-center rounded-xl border border-indigo-200 bg-violet-50 text-indigo-700 shadow-sm transition hover:bg-cyan-100 hover:text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 sm:mb-0.5"
               >
                 <svg
                   aria-hidden="true"
@@ -274,7 +274,7 @@ const NumberConversion = () => {
             className={`w-full rounded-xl border px-4 py-3 font-mono text-lg font-semibold uppercase outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 ${
               inputError
                 ? "border-rose-400 bg-rose-50 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-200"
-                : "border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
+                : "border-cyan-200 bg-cyan-50 text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
             }`}
           />
           <span
@@ -471,7 +471,7 @@ const NumberConversion = () => {
                             )
                           }
                           aria-expanded={isExpanded}
-                          className="mt-3 rounded-lg border border-indigo-200 bg-white/80 px-4 py-2 text-sm font-semibold text-indigo-800 transition hover:bg-indigo-50"
+                          className="mt-3 rounded-lg border border-indigo-200 bg-indigo-50/90 px-4 py-2 text-sm font-semibold text-indigo-800 transition hover:bg-rose-100"
                         >
                           {isExpanded ? "Hide details" : "How to convert"}
                         </button>

@@ -71,7 +71,7 @@ const Quiz = () => {
         Number Systems Quiz
       </h1>
 
-      <article className="rounded-[28px] border border-white/80 bg-white/90 p-6 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.3)] sm:p-8">
+      <article className="rounded-[28px] border border-cyan-100/80 bg-gradient-to-br from-cyan-50/95 via-sky-50/80 to-rose-50/85 p-6 shadow-[0_25px_60px_-22px_rgba(79,70,229,0.3)] sm:p-8">
         {isComplete ? (
           <div className="text-center">
             <p className="text-sm font-bold uppercase tracking-wide text-indigo-700">
@@ -104,7 +104,7 @@ const Quiz = () => {
               </span>
             </div>
             <div
-              className="mb-5 h-2 overflow-hidden rounded-full bg-slate-100"
+              className="mb-5 h-2 overflow-hidden rounded-full bg-gradient-to-r from-cyan-100 via-violet-100 to-rose-100"
               role="progressbar"
               aria-label="Quiz progress"
               aria-valuemin={0}
@@ -112,7 +112,7 @@ const Quiz = () => {
               aria-valuenow={questionIndex}
             >
               <div
-                className="h-full rounded-full bg-linear-to-r from-indigo-600 to-violet-600 transition-all"
+                className="h-full rounded-full bg-linear-to-r from-cyan-500 via-indigo-600 to-rose-500 transition-all"
                 style={{
                   width: `${(questionIndex / questions.length) * 100}%`,
                 }}
@@ -130,8 +130,8 @@ const Quiz = () => {
                     (isSubmitted
                       ? question.answer === index
                       : selectedOption === index)
-                      ? "border-indigo-400 bg-indigo-50 ring-2 ring-indigo-100"
-                      : "border-slate-200 bg-white hover:border-indigo-200 hover:bg-indigo-50/50"
+                      ? "border-teal-400 bg-gradient-to-r from-cyan-50 to-teal-50 ring-2 ring-teal-100"
+                      : "border-sky-200 bg-sky-50/90 hover:border-cyan-300 hover:bg-gradient-to-r hover:from-cyan-100 hover:to-rose-100"
                   }`}
                 >
                   <input
@@ -141,7 +141,7 @@ const Quiz = () => {
                     checked={selectedOption === index}
                     onChange={() => setSelectedOption(index)}
                     disabled={isSubmitted}
-                    className="size-4 accent-indigo-700"
+                    className="size-4 accent-teal-700"
                   />
                   <span className="font-semibold text-slate-800">{option}</span>
                 </label>
@@ -150,7 +150,7 @@ const Quiz = () => {
             <button
               type="submit"
               disabled={!isSubmitted && selectedOption === null}
-              className="mt-6 rounded-xl bg-linear-to-r from-indigo-700 to-violet-700 px-5 py-3 font-bold text-white shadow-lg shadow-indigo-600/20 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-6 rounded-xl bg-linear-to-r from-indigo-700 via-violet-700 to-rose-600 px-5 py-3 font-bold text-white shadow-lg shadow-violet-600/25 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitted
                 ? questionIndex === questions.length - 1

@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+.site-background {
+  background-color: #f8faff;
+  background-image:
+    radial-gradient(ellipse at 8% 12%, rgb(129 140 248 / 22%), transparent 34rem),
+    radial-gradient(ellipse at 92% 18%, rgb(34 211 238 / 19%), transparent 30rem),
+    radial-gradient(ellipse at 92% 82%, rgb(251 113 133 / 15%), transparent 32rem),
+    radial-gradient(ellipse at 35% 96%, rgb(45 212 191 / 14%), transparent 34rem),
+    linear-gradient(135deg, #f8faff 0%, #f8f7ff 48%, #f2fbff 100%);
+  background-attachment: fixed;
+}
+
 .mobile-nav-menu {
   height: 0;
   border-top-width: 0;

@@ -69,7 +69,7 @@ function App() {
 
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
+      <div className="site-background min-h-screen text-slate-800">
         <Navbar currentPath={currentPath} onNavigate={navigate} />
         <div ref={pageContentRef}>
           <NumberSystem
