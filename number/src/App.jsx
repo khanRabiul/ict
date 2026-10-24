@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar";
 import NumberSystem from "./components/NumberSystem";
 import pages from "./data/pages";
@@ -74,6 +75,7 @@ function App() {
           onNavigate={navigate}
         />
       </div>
+      <Analytics />
     </div>
   );
 }

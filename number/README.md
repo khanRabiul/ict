@@ -32,3 +32,9 @@ Import this repository into Vercel and use the detected Vite settings:
 `vercel.json` rewrites application routes to `index.html`, so direct visits and
 refreshes on routes such as `/counters`, `/converter`, `/quiz`, `/test-skills`,
 and `/about` load the single-page app correctly.
+
+### Visitor analytics
+
+Vercel Web Analytics is integrated with the app. After deploying, open the
+project in Vercel, go to **Analytics**, and enable Web Analytics to view visitor
+and page-view data. Analytics data appears after the site receives traffic.
