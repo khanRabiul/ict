@@ -2,7 +2,9 @@
 
 An interactive React app for learning Decimal, Binary, Octal, and Hexadecimal
 number systems. Features include number conversion with explanations, practice
-counters, a quiz, and answer-checking exercises.
+counters, a quiz, and answer-checking exercises. The converter supports
+fractional values (for example, `10.625`) and explains the fractional
+place-value and repeated-multiplication steps.
 
 ## Run locally
 

@@ -94,8 +94,8 @@ const NumberSystem = ({ page, onNavigate }) => {
           <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-blue-700">
             Number systems
           </p>
-          <h1 className="mb-6 bg-linear-to-r from-blue-800 via-indigo-700 to-violet-700 bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl">
-            Number System Counters
+          <h1 className="mb-6 bg-linear-to-r from-blue-800 via-indigo-700 to-violet-700 bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl capitalize">
+            Number system Counters
           </h1>
 
           <div

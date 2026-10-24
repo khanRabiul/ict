@@ -1,5 +1,10 @@
 import { useState } from "react";
 import numberSystems from "../data/numberSystems";
+import {
+  convertRational,
+  getPlaceValueExpansion,
+  parseNumber,
+} from "../utils/numberConversion";
 
 const NumberConversion = () => {
   const [conversionMode, setConversionMode] = useState("single");
@@ -14,57 +19,26 @@ const NumberConversion = () => {
   const sourceSystem = numberSystems.find((system) => system.id === sourceId);
   const targetSystem = numberSystems.find((system) => system.id === targetId);
   const normalizedInput = input.trim().toUpperCase();
-
-  let output = "";
-  let error = "";
-  let decimalValue = 0n;
-  let sourceExpansion = [];
-  let targetDivisionSteps = [];
-
-  if (normalizedInput && sourceSystem && targetSystem) {
-    for (const symbol of normalizedInput) {
-      const digitValue = sourceSystem.symbols.indexOf(symbol);
-
-      if (digitValue < 0) {
-        error = `Use only ${sourceSystem.name} digits: ${sourceSystem.symbols
-          .split("")
-          .join(" ")}`;
-        break;
-      }
-
-      const place = normalizedInput.length - sourceExpansion.length - 1;
-      const placeValue = BigInt(sourceSystem.base) ** BigInt(place);
-      sourceExpansion.push({
-        symbol,
-        digitValue,
-        place,
-        placeValue,
-        contribution: BigInt(digitValue) * placeValue,
-      });
-      decimalValue =
-        decimalValue * BigInt(sourceSystem.base) + BigInt(digitValue);
-    }
-
-    if (!error) {
-      output = decimalValue.toString(targetSystem.base).toUpperCase();
-
-      if (decimalValue > 0n && targetSystem.base !== 10) {
-        let quotient = decimalValue;
-        const base = BigInt(targetSystem.base);
-
-        while (quotient > 0n) {
-          const remainder = quotient % base;
-          const nextQuotient = quotient / base;
-          targetDivisionSteps.push({
-            dividend: quotient,
-            quotient: nextQuotient,
-            remainder: targetSystem.symbols[Number(remainder)],
-          });
-          quotient = nextQuotient;
-        }
-      }
-    }
-  }
+  const parsedInput = sourceSystem
+    ? parseNumber(normalizedInput, sourceSystem)
+    : null;
+  const outputConversion =
+    parsedInput && targetSystem ? convertRational(parsedInput, targetSystem) : null;
+  const output = outputConversion?.value || "";
+  const outputIsTruncated = outputConversion?.isTruncated || false;
+  const sourceExpansion =
+    parsedInput && sourceSystem
+      ? getPlaceValueExpansion(parsedInput, sourceSystem)
+      : [];
+  const decimalSystem = numberSystems.find((system) => system.base === 10);
+  const decimalValue =
+    parsedInput && decimalSystem
+      ? convertRational(parsedInput, decimalSystem).value
+      : "";
+  const error =
+    normalizedInput && sourceSystem && !parsedInput
+      ? getInputError(normalizedInput, sourceSystem)
+      : "";
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -89,23 +63,9 @@ const NumberConversion = () => {
 
   const swapSystems = () => {
     if (normalizedInput && sourceSystem && targetSystem) {
-      const isValidForSource = [...normalizedInput].every((symbol) =>
-        sourceSystem.symbols.includes(symbol)
+      setInput(
+        parsedInput ? convertRational(parsedInput, targetSystem).value : ""
       );
-
-      if (isValidForSource) {
-        let decimalValue = 0n;
-
-        for (const symbol of normalizedInput) {
-          decimalValue =
-            decimalValue * BigInt(sourceSystem.base) +
-            BigInt(sourceSystem.symbols.indexOf(symbol));
-        }
-
-        setInput(decimalValue.toString(targetSystem.base).toUpperCase());
-      } else {
-        setInput("");
-      }
     }
 
     setSourceId(targetId);
@@ -114,15 +74,25 @@ const NumberConversion = () => {
     clearConversion();
   };
 
-  const getInputError = (value, system) => {
-    const invalidSymbol = [...value.toUpperCase()].find(
+  function getInputError(value, system) {
+    const digits = value.replace(".", "");
+    const invalidSymbol = [...digits].find(
       (symbol) => !system.symbols.includes(symbol)
     );
 
-    return invalidSymbol
-      ? `Wrong digit "${invalidSymbol}" for ${system.name}.`
-      : "";
-  };
+    if (invalidSymbol) {
+      return `Wrong digit "${invalidSymbol}" for ${system.name}.`;
+    }
+    if (
+      value.indexOf(".") !== value.lastIndexOf(".") ||
+      value === "." ||
+      value.endsWith(".")
+    ) {
+      return "Enter a number with at most one decimal point and at least one digit after it.";
+    }
+
+    return "";
+  }
 
   return (
     <section
@@ -263,8 +233,8 @@ const NumberConversion = () => {
               clearConversion();
             }}
             aria-invalid={Boolean(inputError || (hasConverted && error))}
-            aria-describedby="number-input-hint number-input-error"
-            placeholder={`Enter ${sourceSystem?.name.toLowerCase()} digits`}
+            aria-describedby="number-input-error"
+            placeholder={`Enter ${sourceSystem?.name.toLowerCase()} digits, e.g. 10.625`}
             autoComplete="off"
             spellCheck="false"
             className={`w-full rounded-xl border px-4 py-3 font-mono text-lg font-semibold uppercase outline-none transition placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 ${
@@ -273,14 +243,6 @@ const NumberConversion = () => {
                 : "border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-200"
             }`}
           />
-          <span
-            id="number-input-hint"
-            className={`mt-2 block text-sm italic text-teal-700 ${
-              inputError ? "" : "hidden"
-            }`}
-          >
-            Allowed digits: {sourceSystem?.symbols.split("").join(", ")}
-          </span>
           <span
             id="number-input-error"
             className="mt-1 block text-sm font-medium text-rose-700"
@@ -320,56 +282,62 @@ const NumberConversion = () => {
                 {targetSystem?.name} output
               </p>
               <p className="mt-2 min-h-8 break-all font-mono text-2xl font-black text-emerald-900">
-                {output || "—"}
+                {output
+                  ? `${output}${outputIsTruncated ? "…" : ""}`
+                  : "—"}
               </p>
+              {outputIsTruncated && (
+                <p className="mt-1 text-xs text-slate-600">
+                  The fractional result continues; shown to 16 digits.
+                </p>
+              )}
             </div>
 
             {showDetails && normalizedInput && sourceSystem && targetSystem && (
               <div className="mt-5 space-y-4">
                 <h2 className="text-lg font-extrabold text-slate-800">
-                  How it converts
+                  How to Convert {sourceSystem.name} to {targetSystem.name}
                 </h2>
 
                 <section className="rounded-2xl border border-blue-100 bg-sky-50/70 p-4">
                   <h3 className="font-bold text-blue-950">
-                    1. Convert {sourceSystem.name} to decimal
+                    {sourceSystem.base === 10
+                      ? "1. Decimal Place-Value Expansion"
+                      : `1. Convert ${sourceSystem.name} to Decimal`}
                   </h3>
                   <p className="mt-2 break-words font-mono text-sm text-slate-700">
-                    {sourceExpansion.map(
-                      ({ symbol, digitValue, place }) => (
+                    {sourceExpansion.map(({ symbol, digitValue, place }, index) => (
                         <span key={`${symbol}-${place}`}>
+                          {index > 0 ? " + " : ""}
                           {symbol}
                           {digitValue > 9 ? ` (${digitValue})` : ""} ×{" "}
                           {sourceSystem.base}^{place}
-                          {place > 0 ? " + " : ""}
                         </span>
-                      )
-                    )}
+                    ))}
                   </p>
                   <p className="mt-2 break-words text-sm text-slate-600">
-                    {sourceExpansion
-                      .map(({ contribution }) => contribution.toString())
-                      .join(" + ")}{" "}
                     ={" "}
                     <strong className="font-mono text-slate-900">
-                      {decimalValue.toString()}
+                      {decimalValue}
                     </strong>
                   </p>
                 </section>
 
                 <section className="rounded-2xl border border-violet-100 bg-violet-50/70 p-4">
                   <h3 className="font-bold text-violet-950">
-                    2. Convert decimal to {targetSystem.name}
+                    {targetSystem.base === 10
+                      ? "2. Decimal Result"
+                      : `2. Convert Decimal to ${targetSystem.name}`}
                   </h3>
                   {targetSystem.base === 10 ? (
                     <p className="mt-2 text-sm text-slate-700">
                       The decimal value is already in the target number system:{" "}
                       <strong className="font-mono">
-                        {decimalValue.toString()}
+                        {decimalValue}
                       </strong>
                       .
                     </p>
-                  ) : decimalValue === 0n ? (
+                  ) : parsedInput?.numerator === 0n ? (
                     <p className="mt-2 text-sm text-slate-700">
                       Zero is represented as{" "}
                       <strong className="font-mono">0</strong> in every number
@@ -378,22 +346,45 @@ const NumberConversion = () => {
                   ) : (
                     <>
                       <p className="mt-2 text-sm text-slate-600">
-                        Repeatedly divide by {targetSystem.base}, then read the
-                        remainders from bottom to top.
+                        Convert the whole-number part by repeated division.
+                        Convert the fractional part by repeatedly multiplying
+                        its remainder by {targetSystem.base}.
                       </p>
-                      <ol className="mt-3 space-y-1 font-mono text-sm text-slate-700">
-                        {targetDivisionSteps.map(
-                          ({ dividend, quotient, remainder }, index) => (
-                            <li key={index}>
-                              {dividend.toString()} ÷ {targetSystem.base} ={" "}
-                              {quotient.toString()}, remainder {remainder}
-                            </li>
-                          )
+                      {outputConversion.integerDivisionSteps.length > 0 && (
+                        <ol className="mt-3 space-y-1 font-mono text-sm text-slate-700">
+                          {outputConversion.integerDivisionSteps.map(
+                            ({ dividend, quotient, remainder }, index) => (
+                              <li key={index}>
+                                {dividend.toString()} ÷ {targetSystem.base} ={" "}
+                                {quotient.toString()}, remainder {remainder}
+                              </li>
+                            )
+                          )}
+                        </ol>
+                      )}
+                      {outputConversion.fractionalMultiplicationSteps.length >
+                        0 && (
+                          <ol className="mt-3 space-y-1 font-mono text-sm text-slate-700">
+                            {outputConversion.fractionalMultiplicationSteps.map(
+                              (
+                                { fraction, product, digit, nextFraction },
+                                index
+                              ) => (
+                                <li key={index}>
+                                  {fraction} × {targetSystem.base} = {product},
+                                  digit {digit}, remainder {nextFraction}
+                                </li>
+                              )
+                            )}
+                          </ol>
                         )}
-                      </ol>
                       <p className="mt-3 text-sm text-slate-700">
-                        Read the remainders bottom to top:{" "}
-                        <strong className="font-mono">{output}</strong>
+                        The integer digits are read bottom to top; the
+                        fractional digits are read top to bottom:{" "}
+                        <strong className="font-mono">
+                          {output}
+                          {outputIsTruncated ? "…" : ""}
+                        </strong>
                       </p>
                     </>
                   )}
@@ -410,26 +401,9 @@ const NumberConversion = () => {
               {numberSystems
                 .filter((system) => system.id !== sourceId)
                 .map((system) => {
-                    const result = decimalValue
-                      .toString(system.base)
-                      .toUpperCase();
+                    const conversion = convertRational(parsedInput, system);
+                    const result = conversion.value;
                     const isExpanded = expandedResultIds.includes(system.id);
-                    const steps = [];
-                    let quotient = decimalValue;
-                    const base = BigInt(system.base);
-
-                    if (system.base !== 10) {
-                      while (quotient > 0n) {
-                        const remainder = quotient % base;
-                        const nextQuotient = quotient / base;
-                        steps.push({
-                          dividend: quotient,
-                          quotient: nextQuotient,
-                          remainder: system.symbols[Number(remainder)],
-                        });
-                        quotient = nextQuotient;
-                      }
-                    }
 
                     return (
                       <div
@@ -441,7 +415,14 @@ const NumberConversion = () => {
                         </p>
                         <p className="mt-2 break-all font-mono text-2xl font-black text-emerald-900">
                           {result}
+                          {conversion.isTruncated ? "…" : ""}
                         </p>
+                        {conversion.isTruncated && (
+                          <p className="mt-1 text-xs text-slate-600">
+                            The fractional result continues; shown to 16
+                            digits.
+                          </p>
+                        )}
                         <button
                           type="button"
                           onClick={() =>
@@ -459,48 +440,48 @@ const NumberConversion = () => {
 
                         {isExpanded && (
                           <div className="mt-4 space-y-3 border-t border-emerald-200 pt-4">
+                            <h3 className="font-extrabold text-slate-800">
+                              How to Convert {sourceSystem.name} to {system.name}
+                            </h3>
                             <section className="rounded-xl border border-blue-100 bg-sky-50/70 p-4">
                               <h3 className="font-bold text-blue-950">
-                                1. Convert {sourceSystem.name} to decimal
+                                {sourceSystem.base === 10
+                                  ? "1. Decimal Place-Value Expansion"
+                                  : `1. Convert ${sourceSystem.name} to Decimal`}
                               </h3>
                               <p className="mt-2 break-words font-mono text-sm text-slate-700">
-                                {sourceExpansion.map(
-                                  ({ symbol, digitValue, place }) => (
+                                {sourceExpansion.map(({ symbol, digitValue, place }, index) => (
                                     <span key={`${symbol}-${place}`}>
+                                      {index > 0 ? " + " : ""}
                                       {symbol}
                                       {digitValue > 9
                                         ? ` (${digitValue})`
                                         : ""}{" "}
                                       × {sourceSystem.base}^{place}
-                                      {place > 0 ? " + " : ""}
                                     </span>
-                                  )
-                                )}
+                                ))}
                               </p>
                               <p className="mt-2 break-words text-sm text-slate-600">
-                                {sourceExpansion
-                                  .map(({ contribution }) =>
-                                    contribution.toString()
-                                  )
-                                  .join(" + ")}{" "}
                                 ={" "}
                                 <strong className="font-mono text-slate-900">
-                                  {decimalValue.toString()}
+                                  {decimalValue}
                                 </strong>
                               </p>
                             </section>
 
                             <section className="rounded-xl border border-violet-100 bg-violet-50/70 p-4">
                               <h3 className="font-bold text-violet-950">
-                                2. Convert decimal to {system.name}
+                                {system.base === 10
+                                  ? "2. Decimal Result"
+                                  : `2. Convert Decimal to ${system.name}`}
                               </h3>
                               {system.base === 10 ? (
                                 <p className="mt-2 text-sm text-slate-700">
                                   The decimal value is already the target
                                   result:{" "}
-                                  <strong className="font-mono">{result}</strong>.
+                                  <strong className="font-mono">{decimalValue}</strong>.
                                 </p>
-                              ) : decimalValue === 0n ? (
+                                ) : parsedInput.numerator === 0n ? (
                                 <p className="mt-2 text-sm text-slate-700">
                                   Zero is represented as 0 in every number
                                   system.
@@ -508,30 +489,67 @@ const NumberConversion = () => {
                               ) : (
                                 <>
                                   <p className="mt-2 text-sm text-slate-600">
-                                    Repeatedly divide by {system.base}, then
-                                    read the remainders from bottom to top.
-                                  </p>
-                                  <ol className="mt-3 space-y-1 font-mono text-sm text-slate-700">
-                                    {steps.map(
-                                      (
-                                        { dividend, quotient: next, remainder },
-                                        index
-                                      ) => (
-                                        <li key={index}>
-                                          {dividend.toString()} ÷ {system.base}{" "}
-                                          = {next.toString()}, remainder{" "}
-                                          {remainder}
-                                        </li>
-                                      )
+                                      Convert the whole-number part by repeated
+                                      division. Convert the fractional part by
+                                      repeatedly multiplying its remainder by{" "}
+                                      {system.base}.
+                                    </p>
+                                    {conversion.integerDivisionSteps.length >
+                                      0 && (
+                                        <ol className="mt-3 space-y-1 font-mono text-sm text-slate-700">
+                                          {conversion.integerDivisionSteps.map(
+                                            (
+                                              { dividend, quotient, remainder },
+                                              index
+                                            ) => (
+                                              <li key={index}>
+                                                {dividend.toString()} ÷{" "}
+                                                {system.base} ={" "}
+                                                {quotient.toString()}, remainder{" "}
+                                                {remainder}
+                                              </li>
+                                            )
+                                          )}
+                                        </ol>
+                                      )}
+                                    {conversion.fractionalMultiplicationSteps
+                                      .length > 0 && (
+                                      <ol className="mt-3 space-y-1 font-mono text-sm text-slate-700">
+                                        {conversion.fractionalMultiplicationSteps.map(
+                                          (
+                                            {
+                                              fraction,
+                                              product,
+                                              digit,
+                                              nextFraction,
+                                            },
+                                            index
+                                          ) => (
+                                            <li key={index}>
+                                              {fraction} × {system.base} ={" "}
+                                              {product}, digit {digit},
+                                              remainder {nextFraction}
+                                            </li>
+                                          )
+                                        )}
+                                      </ol>
                                     )}
-                                  </ol>
-                                  <p className="mt-3 text-sm text-slate-700">
-                                    Read the remainders bottom to top:{" "}
-                                    <strong className="font-mono">
-                                      {result}
-                                    </strong>
-                                  </p>
-                                </>
+                                    <p className="mt-3 text-sm text-slate-700">
+                                      The integer digits are read bottom to top;
+                                      the fractional digits are read top to
+                                      bottom:{" "}
+                                      <strong className="font-mono">
+                                        {result}
+                                        {conversion.isTruncated ? "…" : ""}
+                                      </strong>
+                                    </p>
+                                    {conversion.isTruncated && (
+                                      <p className="text-xs text-slate-600">
+                                        The fractional result continues; shown to
+                                        16 digits.
+                                      </p>
+                                    )}
+                                  </>
                               )}
                             </section>
                           </div>
