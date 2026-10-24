@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
+@keyframes tab-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-panel-enter {
+  animation: tab-panel-enter 220ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel-enter {
+    animation: none;
+  }
+}
+
 @keyframes feedback-modal-enter {
   from {
     opacity: 0;

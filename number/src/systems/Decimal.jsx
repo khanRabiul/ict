@@ -136,7 +136,7 @@ const Decimal = ({ system }) => {
             </div>
 
             <span className="rounded-full border border-cyan-200 bg-gradient-to-r from-cyan-50 to-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-blue-800">
-              Base 10 · Unlimited
+              Base 10 · Digits 0–9
             </span>
           </div>
 
@@ -200,7 +200,7 @@ const Decimal = ({ system }) => {
             <section
               role="tabpanel"
               aria-label="Automatic counter"
-              className="mt-5 rounded-2xl border border-blue-100 bg-gradient-to-b from-sky-50/80 to-white p-4 sm:p-5"
+              className="tab-panel-enter mt-5 rounded-2xl border border-blue-100 bg-gradient-to-b from-sky-50/80 to-white p-4 sm:p-5"
             >
               <h3 className="mt-2 text-center text-lg font-extrabold text-blue-950">
                 Automatic Counter
@@ -255,7 +255,7 @@ const Decimal = ({ system }) => {
             <section
               role="tabpanel"
               aria-label="Manual counter"
-              className="mt-5 rounded-2xl border border-violet-100 bg-gradient-to-b from-violet-50/80 to-white p-4 sm:p-5"
+              className="tab-panel-enter mt-5 rounded-2xl border border-violet-100 bg-gradient-to-b from-violet-50/80 to-white p-4 sm:p-5"
             >
               <h3 className="mt-2 text-center text-lg font-extrabold text-violet-950">
                 Manual Counter

@@ -125,7 +125,10 @@ const NumberConversion = () => {
   };
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
+    <section
+      id="converter"
+      className="mx-auto max-w-3xl scroll-mt-24 px-6 py-12 sm:py-16"
+    >
       <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-blue-700">
         Convert numbers
       </p>
@@ -224,7 +227,7 @@ const NumberConversion = () => {
                 </svg>
               </button>
 
-              <label className="block">
+              <label className="tab-panel-enter block">
             <span className="mb-2 block text-sm font-bold text-slate-700">
               Convert to
             </span>
@@ -310,7 +313,7 @@ const NumberConversion = () => {
         {hasConverted && !error && conversionMode === "single" ? (
           <>
             <div
-              className="mt-5 rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-cyan-50 p-4"
+              className="tab-panel-enter mt-5 rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-cyan-50 p-4"
               aria-live="polite"
             >
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-emerald-800">
@@ -400,7 +403,10 @@ const NumberConversion = () => {
           </>
         ) : hasConverted && !error && conversionMode === "multiple" ? (
           <>
-            <div className="mt-5 space-y-3" aria-live="polite">
+            <div
+              className="tab-panel-enter mt-5 space-y-3"
+              aria-live="polite"
+            >
               {numberSystems
                 .filter((system) => system.id !== sourceId)
                 .map((system) => {

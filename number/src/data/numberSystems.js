@@ -5,7 +5,7 @@ const numberSystems = [
     name: "Decimal",
     base: 10,
     symbols: "0123456789",
-    badge: "Everyday numbers",
+    badge: "Digits 0–9",
     description:
       "The number system we use in everyday counting. Each digit's value depends on its position.",
     example: "345 = 3 × 100 + 4 × 10 + 5 × 1",
@@ -17,7 +17,7 @@ const numberSystems = [
     name: "Binary",
     base: 2,
     symbols: "01",
-    badge: "Computer language",
+    badge: "Digits 0–1",
     description:
       "A base-2 number system that uses only two digits: 0 and 1.",
     example: "101 = 1 × 4 + 0 × 2 + 1 × 1",
@@ -41,7 +41,7 @@ const numberSystems = [
     name: "Hexadecimal",
     base: 16,
     symbols: "0123456789ABCDEF",
-    badge: "Base 16",
+    badge: "Digits 0–9, A–F",
     description:
       "A base-16 number system using digits 0–9 and letters A–F.",
     example: "2F = 2 × 16 + 15 × 1",

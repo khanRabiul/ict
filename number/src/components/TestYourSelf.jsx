@@ -150,7 +150,10 @@ const TestYourSelf = () => {
     : [];
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
+    <section
+      id="test-skills"
+      className="mx-auto max-w-3xl scroll-mt-24 px-6 py-12 sm:py-16"
+    >
       <p className="mb-2 text-sm font-bold uppercase tracking-[0.28em] text-violet-700">
         Practice
       </p>
@@ -227,7 +230,7 @@ const TestYourSelf = () => {
             </label>
 
             {testMode === "single" && (
-              <label className="block">
+              <label className="tab-panel-enter block">
               <span className="mb-2 block text-sm font-bold text-slate-700">
                 Convert to
               </span>
@@ -280,7 +283,7 @@ const TestYourSelf = () => {
             </p>
           )}
 
-          {testMode === "single" && <label className="mt-5 block">
+          {testMode === "single" && <label className="tab-panel-enter mt-5 block">
             <span className="mb-2 block text-sm font-bold text-slate-700">
               Your answer ({targetSystem?.name})
             </span>
@@ -300,7 +303,7 @@ const TestYourSelf = () => {
           </label>}
 
           {testMode === "multiple" && (
-            <div className="mt-5 space-y-4">
+            <div className="tab-panel-enter mt-5 space-y-4">
               <h2 className="text-sm font-bold text-slate-700">
                 Enter a result for each other number system
               </h2>
@@ -356,7 +359,7 @@ const TestYourSelf = () => {
 
         {testMode === "single" && result && (
           <div
-            className={`mt-5 rounded-2xl border p-4 ${
+            className={`tab-panel-enter mt-5 rounded-2xl border p-4 ${
               result.isCorrect
                 ? "border-emerald-200 bg-emerald-50"
                 : "border-rose-200 bg-rose-50"
@@ -460,7 +463,7 @@ const TestYourSelf = () => {
 
         {testMode === "multiple" &&
           Object.keys(multipleResults).length > 0 && (
-            <div className="mt-5 space-y-3">
+            <div className="tab-panel-enter mt-5 space-y-3">
               {numberSystems
                 .filter((system) => multipleResults[system.id])
                 .map((system) => {
